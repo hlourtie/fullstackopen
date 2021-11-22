@@ -1,0 +1,6 @@
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over browser:
+JavaScript code is executed to fetch data and represent it.
+end note
