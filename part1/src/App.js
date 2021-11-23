@@ -12,19 +12,20 @@ const App = () => {
   const Statistics = ({good, neutral, bad, all})=>{
     if(all !== 0){
     return(
-    <>
+    <><table>
       <Statsline text="Good" value={good} />
       <Statsline text="Neutral" value={neutral} />
       <Statsline text="Bad" value={bad} />
       <Statsline text="All" value={all} />
       <Statsline text="Average" value={all !== 0 ?(good - bad)/all : 0} />
       <Statsline text="Positive" value={(all !==0 ? good/all:0)*100+ "%"} />
+      </table>
     </> 
   );}else{
     return(<><p>No Feedback given</p></>);
   }
 }
-  const Statsline = ({text,value}) => <><p>{text} {value}</p></>
+  const Statsline = ({text,value}) => <><tr><td>{text}</td><td>{value}</td></tr></>
   //Click handlers
   const handleGoodClick = () => {
     setAll(all + 1);
