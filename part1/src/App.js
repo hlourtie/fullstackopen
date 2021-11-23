@@ -9,7 +9,9 @@ const App = () => {
   // Components
   const Title = ({name}) => <><h1>{name}</h1></> ;
   const Button = ({handleClick, text}) => <><button onClick={handleClick} >{text}</button></> ;
-  const Statistics = ({good, neutral, bad, all})=>(
+  const Statistics = ({good, neutral, bad, all})=>{
+    if(all !== 0){
+    return(
     <>
       <Statsline text="Good" value={good} />
       <Statsline text="Neutral" value={neutral} />
@@ -18,7 +20,10 @@ const App = () => {
       <Statsline text="Average" value={all !== 0 ?(good - bad)/all : 0} />
       <Statsline text="Positive" value={(all !==0 ? good/all:0)*100+ "%"} />
     </> 
-  )
+  );}else{
+    return(<><p>No Feedback given</p></>);
+  }
+}
   const Statsline = ({text,value}) => <><p>{text} {value}</p></>
   //Click handlers
   const handleGoodClick = () => {
