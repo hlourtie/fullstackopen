@@ -9,7 +9,17 @@ const App = () => {
   // Components
   const Title = ({name}) => <><h1>{name}</h1></> ;
   const Button = ({handleClick, text}) => <><button onClick={handleClick} >{text}</button></> ;
-  const Stats = ({text,value}) => <><p>{text} {value}</p></>
+  const Statistics = ({good, neutral, bad, all})=>(
+    <>
+      <Statsline text="Good" value={good} />
+      <Statsline text="Neutral" value={neutral} />
+      <Statsline text="Bad" value={bad} />
+      <Statsline text="All" value={all} />
+      <Statsline text="Average" value={all !== 0 ?(good - bad)/all : 0} />
+      <Statsline text="Positive" value={(all !==0 ? good/all:0)*100+ "%"} />
+    </> 
+  )
+  const Statsline = ({text,value}) => <><p>{text} {value}</p></>
   //Click handlers
   const handleGoodClick = () => {
     setAll(all + 1);
@@ -31,12 +41,7 @@ const App = () => {
       <Button handleClick={handleNeutralClick} text="Neutral" />
       <Button handleClick={handleBadClick} text="Bad" />
       <Title name="Statistics" />
-      <Stats text="Good" value={good} />
-      <Stats text="Neutral" value={neutral} />
-      <Stats text="Bad" value={bad} />
-      <Stats text="All" value={all} />
-      <Stats text="Average" value={all !== 0 ?(good - bad)/all : 0} />
-      <Stats text="Positive" value={(all !==0 ? good/all:0)*100+ "%"} />
+      <Statistics good={good} bad={bad} neutral={neutral} all={all} />
     </div>
   )
 }
