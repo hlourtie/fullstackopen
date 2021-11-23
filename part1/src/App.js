@@ -1,66 +1,35 @@
-import React from 'react'
-
-const Header = (props) => {
-  return(
-    <>
-    <h1>{props.name}</h1>
-    </>
-  ) 
-}
-const Content = (props) => {
-  console.log(props);
-  const arr = props.parts;
-  console.log(arr);
-  
-  return (
-    arr.map(element=>{
-     return (<Part name={element.name} number={element.exercises} />)
-    }) 
-  )
-}
-
-const Part = (props) =>(
-  <>
-  <p>
-      {props.name} {props.number}
-    </p>
-  </>
-)
-const Total = (props) => {
-  let num = 0;
-  props.parts.forEach(element =>{num+= element.exercises})
-  return(
-    <>
-    <p>Number of exercises {num}</p>
-    </>
-  )
-}
+import React, { useState } from 'react'
 
 const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      }
-    ]
+  // save clicks of each button to its own state
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  // Components
+  const Title = ({name}) => <><h1>{name}</h1></> ;
+  const Button = ({handleClick, text}) => <><button onClick={handleClick} >{text}</button></> ;
+  const Stats = ({text,value}) => <><p>{text} {value}</p></>
+  //Click handlers
+  const handleGoodClick = () => {
+    setGood(good + 1);
   }
-
-
+  const handleNeutralClick = () => {
+    setNeutral(neutral + 1);
+  }
+  const handleBadClick = () => {
+    setBad(bad + 1);
+  }
+  //app return
   return (
     <div>
-      <Header  name={course.name} />
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
+      <Title name="Give Feedback" />
+      <Button handleClick={handleGoodClick} text="Good"/>
+      <Button handleClick={handleNeutralClick} text="Neutral" />
+      <Button handleClick={handleBadClick} text="Bad" />
+      <Title name="Statistics" />
+      <Stats text="Good" value={good} />
+      <Stats text="Neutral" value={neutral} />
+      <Stats text="Bad" value={bad} />
     </div>
   )
 }
