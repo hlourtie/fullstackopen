@@ -13,24 +13,36 @@ const App = () => {
   //State
   const [selected, setSelected] = useState(0);
   const [points, setPoints] = useState(Array(anecdotes.length).fill(0));
+  const [most, setMost] = useState(0);
   
   //Components
   const Button = ({handleClick, text}) => <><button onClick={handleClick} >{text}</button></> ;
   const Lines = ({value}) => <><p>{value}</p></>
+  const Title = ({value}) => <><h1>{value}</h1></>
+
   //Click handlers 
   const handleAnecdoteClick = () => setSelected(Math.floor(Math.random() * (anecdotes.length-1)))
   const handleVoteClick = () => {
+    console.log("before", points)
     const copy = [...points];
     copy[selected] += 1;
     setPoints(copy);
+    console.log("after", points)
+    if(copy[selected] > points[most]){
+      setMost(selected);
+    }
   }
 
   return (
     <div>
+      <Title value="Anecdote of the Day"/>
       <Lines value={anecdotes[selected]}/>
-      <Lines value={"Votes for this anecdote " + points[selected]}/>
+      <Lines value={"has " + points[selected] + " votes" }/>
       <Button handleClick={handleVoteClick} text="Vote"/>
       <Button handleClick={handleAnecdoteClick} text="Random Anecdote"/>
+      <Title value="Anecdote with most votes" />
+      <Lines value={anecdotes[most]}/>
+      <Lines value={"has " + points[most] + " votes" }/>
     </div>
   )
 }
