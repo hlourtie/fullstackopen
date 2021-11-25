@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Title from './components/Title'
-import Content from './components/Persons'
+import Content from './components/Content'
 import Filter from './components/Filter'
 const App = () => {
   const [ persons, setPersons ] = useState([
