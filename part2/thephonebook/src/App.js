@@ -10,10 +10,15 @@ const App = () => {
 
   const addName = (event) => {
     event.preventDefault();
-    const copy = persons.concat({name:newName});
-    setPersons(copy);
-    console.log('button clicked', event.target.value)
+    if ( persons.map((e)=>( e.name)).indexOf(newName) > -1){
+      alert(`${newName} is already in the phonebook`);
+    }else{
+      const copy = persons.concat({name:newName});
+      setPersons(copy);
+      console.log('button clicked', event.target.value)
+    }
     setNewName("");
+  
   }
 
   const handleNameChange = (event) => {
