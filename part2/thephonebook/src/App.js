@@ -1,18 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Title from './components/Title'
 import Content from './components/Content'
 import Filter from './components/Filter'
+import axios from 'axios'
+
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 0 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 1 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 2 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 3 }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setFilter ] = useState('')
   const [ personToDisplay, setPersonToDisplay ]= useState(persons)
+
+  //Gets the data from the server
+  useEffect(() => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+        setPersonToDisplay(response.data)
+      })
+  }, [])
 
   //Form submit handler
   const addName = (event) => {
@@ -20,7 +29,7 @@ const App = () => {
     if ( persons.map((e)=>( e.name)).indexOf(newName) > -1){
       alert(`${newName} is already in the phonebook`);
     }else{
-      const copy = persons.concat({name:newName, number:newNumber, id: persons.length});
+      const copy = persons.concat({name:newName, number:newNumber, id: (persons.length +1)});
       setPersons(copy);
       
       if(newFilter === ''){
