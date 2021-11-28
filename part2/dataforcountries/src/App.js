@@ -10,7 +10,7 @@ const [countries, setCountries] = useState([]);
 const [countriestodisplay,setCountriesToDisplay] = useState([]);
 const [newFilter, setNewFilter] = useState('');
 
-useEffect((filter)=>{
+useEffect(()=>{
   axios.get(`https://restcountries.com/v3.1/all` ).then(response =>{
     console.log(response);
     setCountries(response.data);
