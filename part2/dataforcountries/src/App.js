@@ -26,7 +26,7 @@ const handleFilterChange = (event) =>{
 }
 const clickHandler = (event)=>{
   console.log(event.nativeEvent.srcElement.name)
-  setCountriesToDisplay(countries.filter(country=>filterPatern(event.nativeEvent.srcElement.name, country.name.common)))
+  setCountriesToDisplay(countries.filter(country=>event.nativeEvent.srcElement.name ===country.name.common))
   setState('solo')
   }
 
