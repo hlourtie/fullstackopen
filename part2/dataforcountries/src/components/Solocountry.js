@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import axios from 'axios';
 
 const Solocountry = ({country})=> {
@@ -6,14 +6,14 @@ const Solocountry = ({country})=> {
 	console.log(country.languages);
 	const languages = Object.values(country.languages);
 
-	useEffect(()=>{
+	if(weather.length === 0 ){
 		axios.get(`http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_WEATHERAPI_KEY}&query=${country.capital[0]}`).then(response =>{
 		  console.log(response);
 		  setWeather(response.data);
 		}).catch((error) => {
 		  console.error(error);
-		})
-	  },[])
+		})}
+
 	if(!weather.current){return(
 		<><h3>{country.name.common}</h3>
 			capital:  {country.capital[0]}<br /> 
