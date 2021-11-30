@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import Title from './components/Title'
-import Content from './components/Content'
-import Filter from './components/Filter'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import Title from './components/Title';
+import Content from './components/Content';
+import Filter from './components/Filter';
+import phonebook from './services/phonebook';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -14,32 +14,64 @@ const App = () => {
   //Gets the data from the server
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+    phonebook
+      .getAll()
       .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
-        setPersonToDisplay(response.data)
+        console.log(response)
+        setPersons(response)
+        setPersonToDisplay(response)
       })
   }, [])
 
-  //Form submit handler
+  //Form submit handler && other button click handlers
   const addName = (event) => {
     event.preventDefault();
-    if ( persons.map((e)=>( e.name)).indexOf(newName) > -1){
-      alert(`${newName} is already in the phonebook`);
-    }else{
-      const copy = persons.concat({name:newName, number:newNumber, id: (persons.length +1)});
+    if ( (persons.map((e)=>( e.name)).indexOf(newName) > -1) && window.confirm(`${newName} is already in the phonebook replace the phone Number?`)){
+      const personnel = (persons.filter(person => newName === person.name)) ;
+      console.log("personnel", personnel[0]);
+      phonebook.update({name:newName, number:newNumber , id:personnel[0].id}).then(response =>console.log(response));
+      const copy = persons;
+      copy[persons.map((e)=>( e.name)).indexOf(newName)] = {name:newName, number:newNumber , id:personnel[0].id};
+   
       setPersons(copy);
-      
+      if(newFilter === ''){
+      setPersonToDisplay(copy)
+      }else{
+        setPersonToDisplay(copy.filter(person => filterPatern(newFilter, person.name)))
+      }
+    }else{
+      const newPhoneNumber = {name:newName, number:newNumber, id: (persons[persons.length-1].id + 1)};
+      phonebook.add(newPhoneNumber);
+      const copy = persons.concat(newPhoneNumber);
+   
+      setPersons(copy);
       if(newFilter === ''){
       setPersonToDisplay(copy)
       }else{
         setPersonToDisplay(copy.filter(person => filterPatern(newFilter, person.name)))
       }
     }
+   
     setNewName("");
     setNewNumber("");
+  }
+
+  const deleteHander = (event) =>
+  {
+    console.log("name button", event.nativeEvent.srcElement.name)
+    if(window.confirm("Are you sure you want to delete this person?")){
+      phonebook
+        .remove(event.nativeEvent.srcElement.name)
+        .then(response => console.log("delete response", response))
+      const copy = persons.filter(person => person.id !== event.nativeEvent.srcElement.name);
+      setPersons(copy)
+      if(newFilter === ''){
+        setPersonToDisplay(copy)
+        }else{
+          setPersonToDisplay(copy.filter(person => filterPatern(newFilter, person.name)))
+        }
+      window.location.reload()
+    }
   }
 
 //onchange handlers
@@ -72,7 +104,7 @@ const App = () => {
         </div>
       </form>
       <Title text="Numbers"/>
-      <Content persons={personToDisplay} />
+      <Content persons={personToDisplay} clickHandler={deleteHander} />
     </div>
   )
 }
