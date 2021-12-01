@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Title from './components/Title';
 import Content from './components/Content';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 import phonebook from './services/phonebook';
+
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -10,6 +12,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ newFilter, setFilter ] = useState('')
   const [ personToDisplay, setPersonToDisplay ]= useState(persons)
+  const [message, setMessage]= useState(null)
+  const [className, setClassName] = useState("success")
 
   //Gets the data from the server
   useEffect(() => {
@@ -29,7 +33,24 @@ const App = () => {
     if ( (persons.map((e)=>( e.name)).indexOf(newName) > -1) && window.confirm(`${newName} is already in the phonebook replace the phone Number?`)){
       const personnel = (persons.filter(person => newName === person.name)) ;
       console.log("personnel", personnel[0]);
-      phonebook.update({name:newName, number:newNumber , id:personnel[0].id}).then(response =>console.log(response));
+      phonebook
+        .update({name:newName, number:newNumber , id:personnel[0].id})
+        .then(()=>{
+          setMessage(`${newName} has been updated to the phonebook`);
+          setClassName("succes");
+          setTimeout(() => {
+            setMessage(null)
+            setClassName(null)
+          }, 5000)
+        })
+        .catch(error=>{
+          setMessage(error.message);
+          setClassName("error");
+          setTimeout(() => {
+            setMessage(null)
+            setClassName(null)
+          }, 5000)
+        });;
       const copy = persons;
       copy[persons.map((e)=>( e.name)).indexOf(newName)] = {name:newName, number:newNumber , id:personnel[0].id};
    
@@ -41,7 +62,24 @@ const App = () => {
       }
     }else{
       const newPhoneNumber = {name:newName, number:newNumber, id: (persons[persons.length-1].id + 1)};
-      phonebook.add(newPhoneNumber);
+      phonebook
+        .add(newPhoneNumber)
+        .then(()=>{
+          setMessage(`${newName} has been added to the phonebook`);
+          setClassName("success");
+          setTimeout(() => {
+            setMessage(null)
+            setClassName(null)
+          }, 5000)
+        })
+        .catch(error=>{
+          setMessage(error.message);
+          setClassName("error");
+          setTimeout(() => {
+            setMessage(null)
+            setClassName(null)
+          }, 5000)
+        });
       const copy = persons.concat(newPhoneNumber);
    
       setPersons(copy);
@@ -63,6 +101,16 @@ const App = () => {
       phonebook
         .remove(event.nativeEvent.srcElement.name)
         .then(response => console.log("delete response", response))
+        .catch( error =>{
+          setMessage(error.message);
+          setClassName("error");
+          setTimeout(() => {
+            setMessage(null)
+            setClassName(null)
+          }, 5000)
+        }
+
+        )
       const copy = persons.filter(person => person.id !== event.nativeEvent.srcElement.name);
       setPersons(copy)
       if(newFilter === ''){
@@ -92,6 +140,7 @@ const App = () => {
   return (
     <div>
       <Title text="Phonebook"/>
+      <Notification message={message} className={className}/>
       <Filter value={newFilter} onChange={handleFilterChange}/>
       <Title text="Add new phone number"/>
       <form onSubmit={addName}>

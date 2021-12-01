@@ -1,7 +1,8 @@
 import React from "react";
 
 const Filter = ({value , onChange}) =>(
+    <><br />
     <div>
           filter: <input value={value} onChange={onChange}/>
-        </div>)
+        </div></>)
 export default Filter;
