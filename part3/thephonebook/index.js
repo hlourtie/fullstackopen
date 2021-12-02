@@ -1,5 +1,9 @@
 const express = require('express')
+
+
 const app = express()
+//used to parse the data coming in from post
+app.use(express.json());
 
 let persons = [
     { 
@@ -38,38 +42,40 @@ app.get('/', (request, response) => {
     if (person){
       response.json(person);
     }else{
-      response.status(404)
-
-      response.send(`<h1 style="color:red;">No person with id ${id}</h1>`);
+      response.status(404).send({error:`No person with id ${id} present in the phonebook`});
     }
   })
 
   app.delete('/api/persons/:id', (request, response)=>{
       const id = request.params.id;
+      const person = persons.find(person => person.id === Number(id))
+      if(person){
       persons = persons.filter( person => person.id !== Number(id));
-      response.status(200);
-      response.send(`The information with id ${id} has been deleted`);
+      response.status(200).send({message:`The information with id ${id} has been deleted`});
+    }else{
+      response.status(404).send({error:`No person with id ${id} present in the phonebook`});
+    }
 
   })
   
-  app.post('/api/persons/', (request, response)=>{
+  app.post('/api/persons', (request, response)=>{
     
     const person = request.body
+    console.log(request.params);
     if(!person.name || !person.number 
       || persons.map(person=>person.name).indexOf(person.name)!== -1 
       || persons.map(person=>person.number).indexOf(person.number)!== -1){
-      response.status(400);
-      response.send(!person.name?"name is missing"
+      response.status(400).send(!person.name?"name is missing"
         :(!person.number? "number is missing"
-          :(persons.map(person=>person.name).indexOf(person.name)!== -1 ? `name already exists at id ${persons.map(person=>person.name).indexOf(person.name)}`
-          : `The number already exists at id ${persons.map(person=>person.number).indexOf(person.number)}`)))
-    }
-    //this id selection is less than ideal no idea why the exercise ask us to use a Math.random
-    person.id = Math.ceil(Math.random()* 100000)
+          :(persons.map(person=>person.name).indexOf(person.name)!== -1 ? `name already exists at id ${persons[persons.map(person=>person.name).indexOf(person.name)].id}`
+          : `The number already exists at id ${persons[persons.map(person=>person.number).indexOf(person.number)].id}`)))
+    }else{person.id = Math.ceil(Math.random()* 100000)
   
-    persons = persons.concat(person);
-
-    response.json(persons)
+      persons = persons.concat(person);
+  
+      response.json(persons)}
+    //this id selection is less than ideal no idea why the exercise ask us to use a Math.random
+    
   })
 
   app.get('/info', (request, response)=> {
