@@ -38,9 +38,40 @@ app.get('/', (request, response) => {
     if (person){
       response.json(person);
     }else{
-      throw (`No person with id ${id}`);
+      response.status(404)
+
+      response.send(`<h1 style="color:red;">No person with id ${id}</h1>`);
     }
   })
+
+  app.delete('/api/persons/:id', (request, response)=>{
+      const id = request.params.id;
+      persons = persons.filter( person => person.id !== Number(id));
+      response.status(200);
+      response.send(`The information with id ${id} has been deleted`);
+
+  })
+  
+  app.post('/api/persons/', (request, response)=>{
+    
+    const person = request.body
+    if(!person.name || !person.number 
+      || persons.map(person=>person.name).indexOf(person.name)!== -1 
+      || persons.map(person=>person.number).indexOf(person.number)!== -1){
+      response.status(400);
+      response.send(!person.name?"name is missing"
+        :(!person.number? "number is missing"
+          :(persons.map(person=>person.name).indexOf(person.name)!== -1 ? `name already exists at id ${persons.map(person=>person.name).indexOf(person.name)}`
+          : `The number already exists at id ${persons.map(person=>person.number).indexOf(person.number)}`)))
+    }
+    //this id selection is less than ideal no idea why the exercise ask us to use a Math.random
+    person.id = Math.ceil(Math.random()* 100000)
+  
+    persons = persons.concat(person);
+
+    response.json(persons)
+  })
+
   app.get('/info', (request, response)=> {
     const requestTime = new Date().toString();
     response.send(`<div><p><b>The phonebook has information on ${persons.length} people</b></p><p>${requestTime}</p></div>`)
