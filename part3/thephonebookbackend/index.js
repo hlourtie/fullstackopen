@@ -89,7 +89,10 @@ app.get('/api/persons/', (request, response, next) => {
 
   app.get('/info', (request, response)=> {
     const requestTime = new Date().toString();
-    response.send(`<div><p><b>The phonebook has information on ${persons.length} people</b></p><p>${requestTime}</p></div>`)
+    Entry.find({})
+  .then(result =>{ response.send(`<div><p><b>The phonebook has information on ${result.length} people</b></p><p>${requestTime}</p></div>`)})
+  .catch(error => next(error))
+   
   })
 
   const undefinedEndPoint= (request, response) =>{
