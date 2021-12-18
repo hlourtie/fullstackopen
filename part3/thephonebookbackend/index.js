@@ -44,43 +44,34 @@ app.get('/api/persons/', (request, response, next) => {
   })
   
   app.post('/api/persons', (request, response,next)=>{
-    const entry = request.body
+    const entry = new Entry({name: request.body.name, number:request.body.number})
     console.log(request.params);
-    if(!entry.name || !entry.number){
-      const mess = `${!entry.name? "name is missing ": "number is missing" }`;
-      response.status(400).send(mess)
-    }else{
-    Entry.find({name:entry.name}, function(err, entries) {
-      console.log('name check: ', entries);
-      if(err) {next(err)}
-      else if(entries.length) {
-        response.status(response.status(409).send(`The name already exists at ${entries[0]._id}`))
-      }else if(!entries.length) {
-        console.log('number check: ', entries);
-        Entry.find({number:entry.number}, function(err, entried) {
-          console
-          if(err) {next(err)}
-          else if(entried.length) {
-            response.status(response.status(409).send(`The number already exists at ${entried[0]._id}`))
-          }else if(!entried.length) {
+    
+    // if(!entry.name || !entry.number){
+    //   const mess = `${!entry.name? "name is missing ": "number is missing" }`;
+    //   response.status(400).send(mess)
+    // }else{
+        // Entry.find({number:entry.number}, function(err, entried) {
+        //   console
+        //   if(err) {next(err)}
+        //   else if(entried.length) {
+        //     response.status(response.status(409).send(`The number already exists at ${entried[0]._id}`))
+        //   }else if(!entried.length) {
 
-            const person = new Entry({
-              name: entry.name,
-              number: entry.number
-            });
-            person.save().then(savedEntry => {
+            // const person = new Entry({
+            //   name: entry.name,
+            //   number: entry.number
+            // });
+            entry.save().then(savedEntry => {
               response.status(201).json(savedEntry)
             }).catch(err => next(err));
-          }
-      })}
+          // }
+        // })
     })
-  }
-    
-  })
 
   app.put('/api/persons/:id', (request, response, next) => {
     //console.log("body", request.body);
-      Entry.findByIdAndUpdate(request.params.id, {number:request.body.number}, {new:true})
+      Entry.findByIdAndUpdate(request.params.id, {number:request.body.number}, {runValidators:true, new:true})
       .then(entry => {
         console.log("response entry", entry)
         response.status(200).json(entry)})
