@@ -13,6 +13,11 @@ const blogSchema = new mongoose.Schema({
 	likes:{ 
 		type:Number, 
 		default: 0	
+	},
+	user:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+		default:"61c98912473cbb947a05ccfb"
 	}
   })
 
