@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import Message from './components/Message'
+import Noteform from './components/Noteform'
+import Loginform from './components/Loginform'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -14,9 +16,11 @@ const App = () => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+  const [formVisible, setFormVisible] = useState(false)
+
   useEffect(() => {
-     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+     blogService.getAll().then(blogs =>{
+      setBlogs( blogs)}
     )  
   }, [])
 
@@ -45,6 +49,7 @@ try{
   const newBlog = await blogService.create({title:title, author:author, url:url, likes:0})
   const tempblog = blogs.concat(newBlog)
   setBlogs(tempblog)
+  setFormVisible(false)
   setTitle('')
   setAuthor('')
   setUrl('')
@@ -57,41 +62,38 @@ try{
   }, 5000)
   }
 }
+// const addLike = async (id,likes) => {
+//   await blogService.update(id,{likes:(likes+1)})
+//   const index = blogs.findIndex(blog => blog.id === id)
+//   blogs[index].likes = likes + 1
+//   const newBlogs = blogs
+//   setBlogs(newBlogs)
+// }
 
-  const loginForm = () => (<div>
+  const loginForm = () => {
+    
+  return (<div>
    <h2>Log into the application</h2>
-     <form onSubmit={handleLogin} >
-     <div>
-          name: <input value={username} onChange={({ target }) => setUsername(target.value)}/><br />
-          password: <input type="password" value={password}  onChange={({ target }) => setPassword(target.value)}/>
-        </div>
-        <div>
-          <button type="submit">Login</button>
-        </div>
-     </form>
-   </div> )
+   <Loginform handleLogin={handleLogin} username={username} setUsername={setUsername} password={password} setPassword={setPassword}/>
+   </div> )}
 
-  const blogsDisplay = () =>( <> <h2>blogs</h2> 
-  <div>{user.name} logged in <button onClick={handleLogOut}>Logout</button></div>
-  <div>
-    <form onSubmit={handleCreation}>
+  const blogsDisplay = () =>{
+    const hideWhenVisible = { display: formVisible ? 'none' : '' }
+    const showWhenVisible = { display: formVisible ? '' : 'none' }
+    const tempBlog = blogs.sort((a, b) => (a.likes > b.likes)? 1:-1);
+
+  return( <> <h2>blogs</h2> 
+    <div>{user.name} logged in <button onClick={handleLogOut}>Logout</button></div><br />
+    <div style={hideWhenVisible}><button onClick={() => setFormVisible(true)}>Create new Note</button></div>
+    <div style={showWhenVisible}>
+    <Noteform handleCreation={handleCreation} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} />
+    <button onClick={() => setFormVisible(false)}>cancel</button>
+    </div>
     <br />
-      <br />
-      <div>
-      title: <input value={title}  onChange={({ target }) => setTitle(target.value)}/> <br />
-      author: <input  value={author}  onChange={({ target }) => setAuthor(target.value)} /> <br />
-      url: <input value={url}  onChange={({ target }) => setUrl(target.value)} /> <br />
-      </div>
-      <br />
-      <br />
-      <div>
-      <button type="submit">Create</button>
-      </div>
-    </form>
-  </div>
-  <div><p>{blogs.map(blog =>
-    <Blog key={blog.id} blog={blog} />)
-  }</p></div> </>)
+    <br />
+
+    <div>{tempBlog.map(blog =><Blog key={blog.id} blog={blog} token={user.id}/>)}</div> </>)
+    }
 
   const handleLogOut = (event) =>{
     event.preventDefault()

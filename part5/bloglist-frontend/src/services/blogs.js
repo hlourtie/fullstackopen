@@ -20,9 +20,25 @@ const create = (body) =>{
   const request = axios.post(baseUrl,body, config)
   return request.then(response =>response.data)
 }
+const update = (id, body)=>{
+  const config = {
+    headers: {Authorization: token}
+  }
+  const request = axios.put(baseUrl+'/'+id,body, config)
+  return request.then(response =>response.data)
+}
+const remove = (id) => {
+  const config = {
+    headers: {Authorization: token}
+  }
+  const request = axios.delete(baseUrl+'/'+id, config)
+  return request.then(response => response.data)
+}
 const exportedObject = {
+  setToken,
   getAll,
   create,
-  setToken
+  update,
+  remove
 }
 export default exportedObject
