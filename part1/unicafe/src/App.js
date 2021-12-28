@@ -26,6 +26,7 @@ const App = () => {
   }
 }
   const Statsline = ({text,value}) => <><tr><td>{text}</td><td>{value}</td></tr></>
+  
   //Click handlers
   const handleGoodClick = () => {
     setAll(all + 1);

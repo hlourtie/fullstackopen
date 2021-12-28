@@ -23,11 +23,9 @@ const App = () => {
   //Click handlers 
   const handleAnecdoteClick = () => setSelected(Math.floor(Math.random() * (anecdotes.length-1)))
   const handleVoteClick = () => {
-    console.log("before", points)
     const copy = [...points];
     copy[selected] += 1;
     setPoints(copy);
-    console.log("after", points)
     if(copy[selected] > points[most]){
       setMost(selected);
     }

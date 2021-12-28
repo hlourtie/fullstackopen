@@ -15,6 +15,7 @@ blogRouter.post('/', async (request, response) => {
 	if(!token || !clearToken.id){
 		return response.status(401).json({error: 'token invalid or missing'})
 	}
+	console.log("clear token", clearToken)
 	const user = await User.findById(clearToken.id)
 	console.log(user)
 	const blog = new Blog({
@@ -47,6 +48,15 @@ blogRouter.put('/:id', async (request, response) => {
 })
 blogRouter.delete('/:id', async (request, response) => {
 	const id = request.params.id
+	const token = request.token
+	const clearToken = jwt.verify(token, process.env.SECRET)
+	if(!token || !clearToken.id){
+		return response.status(401).json({error: 'token invalid or missing'})
+	}
+	const blog = await Blog.findById(id)
+	if(blog.user.toString() !== clearToken.id ){
+		return response.status(401).json({error: 'you are not the owner of this blogpost'})
+	}
 	await Blog.findByIdAndRemove(id)
 	response.status(204).end()
 })

@@ -11,13 +11,7 @@ blogRouter.get('/', async (request, response) => {
 
 blogRouter.post('/', userExtractor, async (request, response) => {
 	 const body = request.body
-	// const token = request.token
-	// const clearToken = jwt.verify(token, process.env.SECRET)
-	// if(!token || !clearToken.id){
-	// 	return response.status(401).json({error: 'token invalid or missing'})
-	// }
-	//console.log("clear token", clearToken)
-	const user = request.user //await User.findById(clearToken.id)
+	const user = request.user 
 	console.log(user)
 	const blog = new Blog({
 		title: body.title,
@@ -47,15 +41,12 @@ blogRouter.put('/:id', userExtractor, async (request, response) => {
 	response.status(200).json(result.toJSON());
 	
 })
+
 blogRouter.delete('/:id', userExtractor, async (request, response) => {
 	const id = request.params.id
-	const token = request.token
-	const clearToken = jwt.verify(token, process.env.SECRET)
-	if(!token || !clearToken.id){
-		return response.status(401).json({error: 'token invalid or missing'})
-	}
+	const user = request.user
 	const blog = await Blog.findById(id)
-	if(blog.user.toString() !== clearToken.id ){
+	if(blog.user.toString() !== user ){
 		return response.status(401).json({error: 'you are not the owner of this blogpost'})
 	}
 	await Blog.findByIdAndRemove(id)
