@@ -6,6 +6,7 @@ const Noteform = ({ handleCreation }) => {
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+
   const submitAction = (event) => {
     event.preventDefault()
     handleCreation({ title:title, author:author, url: url, likes: 0 })
@@ -28,7 +29,7 @@ const Noteform = ({ handleCreation }) => {
 	<br />
       <br />
       <div>
-      <button type="submit">Create</button>
+      <button id='new-note-submit-butt'type="submit">Create</button>
       </div>
     </form>
     </div>

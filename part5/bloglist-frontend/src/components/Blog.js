@@ -18,6 +18,8 @@ const Blog = ({ blog,token }) => {
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
+  console.log('blog.user.id', blog)
+  console.log('token', token)
   const isUser = { display : (token === blog.user.id) ?'':'none' }
   const addLike = async (id) => {
     const newobject = await blogService.update(id, { likes:(likes+1) } )
@@ -37,10 +39,10 @@ const Blog = ({ blog,token }) => {
           <tr><td>{blog.title} {blog.author}&nbsp;&nbsp;
             <button style={hideWhenVisible} className='viewButton' onClick={() => (setVisible(true))}>view</button>
             <button style={showWhenVisible} onClick={() => (setVisible(false))}>hide</button>
-            <button style={isUser} onClick={() => (deleteBlog(blog.id))}>delete</button>
+            <button style={isUser} className='deleteButton' onClick={() => (deleteBlog(blog.id))}>delete</button>
           </td></tr>
           <tr><td><div className='urlrow' style={showWhenVisible}> {blog.url}</div></td></tr>
-          <tr><td><div className='likesrow' style={showWhenVisible}>likes {likes} <button onClick={() => {addLike(blog.id)}}>Like</button></div></td></tr>
+          <tr><td><div className='likesrow' style={showWhenVisible}>likes {likes} <button className='likebutton' onClick={() => {addLike(blog.id)}}>Like</button></div></td></tr>
         </tbody>
       </table>
       </div>

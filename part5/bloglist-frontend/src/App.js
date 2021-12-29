@@ -80,7 +80,7 @@ try{
 
   return( <> <h2>blogs</h2>
     <div>{user.name} logged in <button onClick={handleLogOut}>Logout</button></div><br />
-    <div style={hideWhenVisible}><button onClick={() => setFormVisible(true)}>Create new Note</button></div>
+    <div style={hideWhenVisible}><button id='new-for-button' onClick={() => setFormVisible(true)}>Create new Note</button></div>
     <div style={showWhenVisible}>
     <Noteform handleCreation={ handleCreation } />
     <button onClick={() => setFormVisible(false)}>cancel</button>
