@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "start:test": "NODE_ENV=test node index.js"
   },
   "author": "Henry Lourtie",
   "license": "ISC",
@@ -22,12 +23,14 @@
     "lodash": "^4.17.21",
     "mongoose": "^6.1.2",
     "mongoose-unique-validator": "^3.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "prop-types": "^15.8.0"
   },
   "jest": {
     "testEnvironment": "node"
   },
   "devDependencies": {
+    "eslint-plugin-jest": "^25.3.2",
     "supertest": "^6.1.6"
   }
 }
