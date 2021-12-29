@@ -13,9 +13,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState(null)
   const [className, setClassName] = useState(null)
-  const [author, setAuthor] = useState('')
-  const [title, setTitle] = useState('')
-  const [url, setUrl] = useState('')
   const [formVisible, setFormVisible] = useState(false)
 
   useEffect(() => {
@@ -53,16 +50,12 @@ const handleLogin = async (event) => {
       }, 5000)
     }
   }
-const handleCreation = async (event) => {
-event.preventDefault()
+const handleCreation = async (body) => {
 try{
-  const newBlog = await blogService.create({ title:title, author:author, url:url, likes:0 })
+  const newBlog = await blogService.create({ title:body.title, author:body.author, url:body.url, likes:0 })
   const tempblog = blogs.concat(newBlog)
   setBlogs(tempblog)
   setFormVisible(false)
-  setTitle('')
-  setAuthor('')
-  setUrl('')
 }catch(e){
   setMessage(e.message)
   setClassName('error')
@@ -89,7 +82,7 @@ try{
     <div>{user.name} logged in <button onClick={handleLogOut}>Logout</button></div><br />
     <div style={hideWhenVisible}><button onClick={() => setFormVisible(true)}>Create new Note</button></div>
     <div style={showWhenVisible}>
-    <Noteform handleCreation={handleCreation} title={title} setTitle={setTitle} author={author} setAuthor={setAuthor} url={url} setUrl={setUrl} />
+    <Noteform handleCreation={ handleCreation } />
     <button onClick={() => setFormVisible(false)}>cancel</button>
     </div>
     <br />

@@ -31,18 +31,19 @@ const Blog = ({ blog,token }) => {
     }
   }
   return(
-    <>
+    <><div className='testBlogClass'>
       <table style={blogStyle}>
         <tbody>
           <tr><td>{blog.title} {blog.author}&nbsp;&nbsp;
-            <button style={hideWhenVisible} onClick={() => (setVisible(true))}>view</button>
+            <button style={hideWhenVisible} className='viewButton' onClick={() => (setVisible(true))}>view</button>
             <button style={showWhenVisible} onClick={() => (setVisible(false))}>hide</button>
             <button style={isUser} onClick={() => (deleteBlog(blog.id))}>delete</button>
           </td></tr>
-          <tr><td><div style={showWhenVisible}> {blog.url}</div></td></tr>
-          <tr><td><div style={showWhenVisible}>likes {likes} <button onClick={() => {addLike(blog.id)}}>Like</button></div></td></tr>
+          <tr><td><div className='urlrow' style={showWhenVisible}> {blog.url}</div></td></tr>
+          <tr><td><div className='likesrow' style={showWhenVisible}>likes {likes} <button onClick={() => {addLike(blog.id)}}>Like</button></div></td></tr>
         </tbody>
       </table>
+      </div>
     </>
   ) }
 
