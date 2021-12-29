@@ -1,6 +1,6 @@
-import React from "react"; 
+import React from 'react'
 
-const Message = ({message, className}) => {
+const Message = ({ message, className }) => {
 	if (message === null){
 		return null
 	}

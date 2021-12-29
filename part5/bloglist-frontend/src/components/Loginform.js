@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react'
 
-const Loginform = ({handleLogin, username, setUsername, password, setPassword}) =>{
-	
+const Loginform = ({ handleLogin, username, setUsername, password, setPassword }) => {
+
 	return(
 	<>
 	<form onSubmit={handleLogin} >
@@ -13,7 +13,7 @@ const Loginform = ({handleLogin, username, setUsername, password, setPassword}) 
           <button type="submit">Login</button>
         </div>
      </form>
-	 </>)
+	</>)
 }
 
 export default Loginform

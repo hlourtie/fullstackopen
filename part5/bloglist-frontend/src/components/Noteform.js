@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react'
 
-const Noteform = ({handleCreation, title,setTitle,author,setAuthor,url,setUrl}) => {return(
+const Noteform = ({ handleCreation, title,setTitle,author,setAuthor,url,setUrl }) => {return(
 	<>
 	<form onSubmit={handleCreation}>
     <br />
@@ -10,13 +10,13 @@ const Noteform = ({handleCreation, title,setTitle,author,setAuthor,url,setUrl}) 
       author: <input  value={author}  onChange={({ target }) => setAuthor(target.value)} /> <br />
       url: <input value={url}  onChange={({ target }) => setUrl(target.value)} /> <br />
       </div>
-	  <br />
+	<br />
       <br />
       <div>
       <button type="submit">Create</button>
       </div>
     </form>
-	  </>)
+	</>)
 
 }
 
