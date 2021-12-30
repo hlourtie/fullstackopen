@@ -19,11 +19,37 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+export const addLike = (id) =>{
+  return {
+    type:'LIKE',
+    data:{ id : id }
+  }
+}
+
+export const newAnecdote = (content) =>{
+  return {
+    type: 'NEWANECDOTE',
+    data: {content : content}
+  }
+}
+
 const reducer = (state = initialState, action) => {
   console.log('state now: ', state)
   console.log('action', action)
-
-  return state
+  switch (action.type){
+    case 'LIKE':
+      const ind = state.findIndex(element => element.id === action.data.id)
+      const newstate = state; 
+      newstate[ind] = { ...newstate[ind], votes : newstate[ind].votes + 1 }
+      console.log('after manip', newstate)
+      return newstate
+    
+    case 'NEWANECDOTE':
+      const newAnecdote = asObject(action.data.content)
+      return state.concat(newAnecdote)
+      
+    default :return state
+  }
 }
 
 export default reducer
