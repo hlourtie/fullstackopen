@@ -19,10 +19,13 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-export const addLike = (id) =>{
+export const addLike = (id, content) =>{
   return {
     type:'LIKE',
-    data:{ id : id }
+    data:{ 
+      id : id,
+      name: content 
+    }
   }
 }
 
@@ -33,15 +36,12 @@ export const newAnecdote = (content) =>{
   }
 }
 
-const reducer = (state = initialState, action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+const anecdoteReducer = (state = initialState , action) => {
   switch (action.type){
     case 'LIKE':
       const ind = state.findIndex(element => element.id === action.data.id)
       const newstate = state; 
       newstate[ind] = { ...newstate[ind], votes : newstate[ind].votes + 1 }
-      console.log('after manip', newstate)
       return newstate
     
     case 'NEWANECDOTE':
@@ -52,4 +52,4 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export default reducer
+export default anecdoteReducer

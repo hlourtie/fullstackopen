@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { newAnecdote } from "../reducers/anecdoteReducer"
 
 
-
 const AnecdoteForm = () => {
 
 	const dispatch = useDispatch()
@@ -11,6 +10,7 @@ const AnecdoteForm = () => {
 	const createNewAnecdote = (event) => {
 		event.preventDefault()
 		dispatch(newAnecdote(event.target.content.value))
+		setTimeout(()=>{dispatch({type:'REMOVE'})}, 5000)
 		event.target.content.value = ''
 	}
 	return (<>
