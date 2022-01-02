@@ -1,6 +1,8 @@
 import React from "react"
 import { addLike } from "../reducers/anecdoteReducer"
 import { useSelector, useDispatch } from 'react-redux'
+import { setNotification } from "../reducers/notificationReducer"
+
 
 const AnecdoteList = () => {
 
@@ -11,9 +13,9 @@ const AnecdoteList = () => {
 	const tempanecdotes = useSelector(state => state.anecdotes)
 	const filteredAnecdotes = newFilter ? tempanecdotes.filter(anecdote => filterPatern(newFilter, anecdote.content)):tempanecdotes
 	const anecdotes = filteredAnecdotes.sort((a,b) => a.votes > b.votes ? -1 : 1 )
-	const vote = (id, content) => {
-		dispatch(addLike(id, content))
-		setTimeout(()=>{dispatch({type:'REMOVE'})}, 5000)
+	const vote = (anecdote) => {
+		dispatch(addLike(anecdote))
+		dispatch(setNotification(`you voted for ${anecdote.content}`, 5))
 	  }
 	return (<>
 		{anecdotes.map(anecdote =>
@@ -23,7 +25,7 @@ const AnecdoteList = () => {
 			</div>
 			<div>
 				has {anecdote.votes} &nbsp;&nbsp;&nbsp;
-				<button onClick={() => vote(anecdote.id, anecdote.content)}>vote</button>
+				<button onClick={() => vote(anecdote)}>vote</button>
 			</div>
 			</div>
 		)}</>)

@@ -1,12 +1,16 @@
 
+export const setNotification = (content , time) =>
+{
+  return dispatch => {
+    dispatch({type:'SETNOTIFICATION', data: content})
+    setTimeout(()=>{dispatch({type:'REMOVE'})}, time * 1000)
+  }
+}
+
 const notificationReducer = (state = '', action) => {
 	switch (action.type){
-		case 'LIKE':
-      const not = 'you voted for ' + action.data.name
-      return not
-    case 'NEWANECDOTE':
-      const notif = 'new anecdote created \'' +action.data.content + '\'' 
-      return notif
+		case 'SETNOTIFICATION':
+      return action.data
     case 'REMOVE':
       return ''
     default : return state

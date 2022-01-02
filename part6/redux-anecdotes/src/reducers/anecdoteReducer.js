@@ -1,42 +1,41 @@
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
+import anecdoteService from '../services/anecdotes'
 
-const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
+//const initialState = anecdoteService.getAll().then(anecdotes => anecdotes)
 
-const initialState = anecdotesAtStart.map(asObject)
-
-export const addLike = (id, content) =>{
-  return {
+export const addLike = (anecdote) =>{
+  return async dispatch => {
+    const anecdoteTosend = { ...anecdote, votes : anecdote.votes + 1 }
+    await anecdoteService.vote(anecdoteTosend)
+    dispatch ( {
     type:'LIKE',
     data:{ 
-      id : id,
-      name: content 
-    }
+      id : anecdote.id,
+      name: anecdote.content 
+    }})}
   }
-}
 
 export const newAnecdote = (content) =>{
-  return {
-    type: 'NEWANECDOTE',
-    data: {content : content}
+
+  return async dispatch => {
+    const anecdote =  await anecdoteService.createNew(content)
+    dispatch({
+      type: 'NEWANECDOTE',
+      data: anecdote
+  })}
+}
+
+export const initializeAnecdotes = () => {
+  return async dispatch => {
+    const anecdotes = await anecdoteService.getAll()
+    dispatch({
+      type : 'INITANECDOTES',
+      data : anecdotes
+  })
   }
 }
 
-const anecdoteReducer = (state = initialState , action) => {
+const anecdoteReducer = (state = [] , action) => {
   switch (action.type){
     case 'LIKE':
       const ind = state.findIndex(element => element.id === action.data.id)
@@ -45,8 +44,11 @@ const anecdoteReducer = (state = initialState , action) => {
       return newstate
     
     case 'NEWANECDOTE':
-      const newAnecdote = asObject(action.data.content)
+      const newAnecdote  =  action.data
       return state.concat(newAnecdote)
+
+    case 'INITANECDOTES':
+      return action.data
       
     default :return state
   }
