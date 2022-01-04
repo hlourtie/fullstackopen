@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Switch, Route, Link, useRouteMatch,  useHistory} from "react-router-dom"
-
+import { useField } from './hooks'
 
 const Menu = () => {
   const padding = {
@@ -60,46 +60,59 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
   const history = useHistory()
+  const content = useField('text','content')
+  const author = useField('text', 'author')
+  const info = useField('text','info')
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(content)
     props.addNew({
-      content,
-      author,
-      info,
+      content:content.value,
+      author:author.value,
+      info:info.value,
       votes: 0
     })
     props.notifyUser(`you have created a new anecdote '${content}'`)
     history.push('/ ')
-    
   }
-
+  
+  const handleReset = (e) =>{
+    content.reset()
+    author.reset()
+    info.reset()
+  }
+  
+const removeProp = 'reset'
+const {[removeProp]:contentRem, ...restContent} = content
+const {[removeProp]:authorRem, ...restAuthor } = author
+const {[removeProp]:infoRem, ...restInfo } = info
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...restContent}/>
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...restAuthor}/>
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...restInfo} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
 
 }
+
+
 const Notification = ({notif}) => {
   return(<>{notif}</>)
 }
