@@ -19,13 +19,34 @@ const useField = (type) => {
 
 const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
+ console.log(baseUrl)
+  useEffect( () =>{
+    const controller = new AbortController();
 
-  // ...
+    const fetchInitial = async (baseUrl) =>{
+      try{
+      const response = await axios.get(baseUrl, {signal: controller.signal})
+      setResources(response.data)
+    }catch (e){
+        return e
+      }
+      controller.abort()
+    }
 
-  const create = (resource) => {
-    // ...
+    fetchInitial(baseUrl)
+  },[baseUrl])
+
+  const create = async (resource) => {
+    try{
+    const response = await axios.post( baseUrl, resource )
+    const newResources = resources.concat( response.data )
+    setResources(newResources)
+    return response.data
+  }catch (e){
+    return e
   }
-
+  }
+  
   const service = {
     create
   }
@@ -41,6 +62,7 @@ const App = () => {
   const number = useField('text')
 
   const [notes, noteService] = useResource('http://localhost:3005/notes')
+  console.log(notes)
   const [persons, personService] = useResource('http://localhost:3005/persons')
 
   const handleNoteSubmit = (event) => {
