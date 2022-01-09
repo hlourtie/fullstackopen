@@ -1,14 +1,23 @@
 import React from 'react'
+import { loginUser } from '../reducers/userReducer'
+import { useDispatch } from 'react-redux'
 
-const Loginform = ({ handleLogin, username, setUsername, password, setPassword }) => {
-// we here need to remodel the entire loging steps to got to redux state/store it should be easieer than pass the entire shlong along
+const Loginform = () => {
 
+  const dispatch  = useDispatch()
+  const handleLogin = (event) => {
+    event.preventDefault()
+    const cred = { username: event.target.username.value, password: event.target.password.value }
+    dispatch(loginUser(cred))
+    event.target.username.value = ''
+    event.target.password.value = ''
+  }
 	return(
 	<>
 	<form onSubmit={handleLogin} >
      <div>
-          name: <input id='name' value={username} onChange={({ target }) => setUsername(target.value)}/><br />
-          password: <input id='password' type="password" value={password}  onChange={({ target }) => setPassword(target.value)}/>
+          name: <input id='name' name='username' /><br />
+          password: <input id='password' type="password" name='password'/>
         </div>
         <div>
           <button id='loginbutton' type="submit">Login</button>
