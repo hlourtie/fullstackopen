@@ -1,6 +1,6 @@
 
 const filterReducer = (state = false, action) => {
-	return state
+	return { state, action }
 }
 
 export default filterReducer

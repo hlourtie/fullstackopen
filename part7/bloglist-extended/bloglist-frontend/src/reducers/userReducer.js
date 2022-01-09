@@ -4,6 +4,7 @@ import { setMessage } from './messageReducer'
 
 export const initiateUser = (user) => {
 	return dispatch => {
+		console.log('user', user)
 		blogService.setToken(user.token)
 		dispatch({
 			type:'INITUSER',
@@ -25,18 +26,31 @@ export const loginUser = (cred) => {
 			data: userdata
 		})
 	}catch (e){
-		dispatch(setMessage(e.name, 'error', 5))
+		dispatch(setMessage('Wrong credentials', 'error', 5))
 	}
 	}
 }
 
-const userReducer = (state={}, action) => {
+export const logoutUser = () => {
+	window.localStorage.setItem(
+		'blogappUser', null
+	)
+	return dispatch => {
+		dispatch({
+			type: 'LOGOUT'
+		})
+	}
+}
+
+const userReducer = (state= null, action) => {
 
 	switch (action.type){
 		case 'LOGIN':
 			return action.data
 		case 'INITUSER':
 			return action.data
+		case 'LOGOUT':
+			return null
 		default : return state
 	}
 }

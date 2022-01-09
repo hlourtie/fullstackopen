@@ -3,6 +3,7 @@ import blogService from '../services/blogs'
 export const initBlog =  () => {
 	return async dispatch => {
 		const blogs = await blogService.getAll()
+		console.log(blogs)
 		dispatch({
 			type: 'INITBLOG',
 			data: blogs
@@ -22,6 +23,7 @@ export const newBlogPost = (blog) => {
 
 export const addLike = (blog) => {
 	return async dispatch => {
+		console.log(blog)
 		const blogToUpdate =  { ...blog, likes: blog.likes + 1 }
 		await blogService.update(blogToUpdate.id, blogToUpdate)
 		dispatch({
@@ -53,7 +55,10 @@ const blogReducer = (state=[], action) => {
 		}
 		case 'DELETE':{
 			const inde = state.findIndex(element => element.id === action.data)
-			return state.splice(inde,1)
+			const newState = state
+			newState.splice(inde,1)
+			console.log(newState)
+			return newState
 		}
 		default: return state
 	}

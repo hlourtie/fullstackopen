@@ -8,10 +8,10 @@ import thunk from 'redux-thunk'
 
 
 const initialState = {
-	blogs : [],
+	blog : [],
 	message: {},
 	filter: false,
-	user:{}
+	user: null
 }
 
 const reducer = combineReducers ({

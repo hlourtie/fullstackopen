@@ -1,10 +1,10 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { newBlogPost } from '../reducers/blogreducer'
+import { newBlogPost } from '../reducers/blogReducer'
 import { setMessage } from '../reducers/messageReducer'
 
 
-const Noteform = () => {
+const Noteform = ( ) => {
   const dispatch = useDispatch()
 
   const createBlog = (event) => {
@@ -16,10 +16,11 @@ const Noteform = () => {
       likes : 0
     }
     dispatch(newBlogPost(newBlog))
-    dispatch (setMessage(event.target.title.value , 5))
+    dispatch (setMessage(event.target.title.value , 'success', 5))
     event.target.title.value = ''
     event.target.author.value = ''
    event.target.url.value = ''
+
   }
 
   return(

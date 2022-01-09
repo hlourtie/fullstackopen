@@ -1,7 +1,7 @@
 import React,{ useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { addLike, deleteBlog } from '../reducers/blogreducer'
+import { addLike, deleteBlog } from '../reducers/blogReducer'
 import { setMessage } from '../reducers/messageReducer'
 
 const Blog = ({ blog,token }) => {
@@ -24,14 +24,14 @@ const Blog = ({ blog,token }) => {
 
   const isUser = { display : (token === blog.user.id) ?'':'none' }
 
-  const liking = async (id) => {
-    dispatch(addLike (id, blog ))
-    dispatch(setMessage(`you have liked ${ blog.content }`))
+  const liking = async (blog) => {
+    dispatch(addLike ( blog ))
+    dispatch(setMessage(`you have liked ${ blog.title }`, 'success', 5))
   }
 
-  const delBlog = async (id) => {
+  const delBlog = async (blog) => {
     if(window.confirm('Are you sure you want to delete this blog?')){
-      dispatch(deleteBlog(id))
+      dispatch(deleteBlog(blog.id))
     }
   }
   return(
@@ -41,10 +41,10 @@ const Blog = ({ blog,token }) => {
           <tr><td>{blog.title} {blog.author}&nbsp;&nbsp;
             <button style={hideWhenVisible} className='viewButton' onClick={() => (setVisible(true))}>view</button>
             <button style={showWhenVisible} onClick={() => (setVisible(false))}>hide</button>
-            <button style={isUser} className='deleteButton' onClick={() => (delBlog(blog.id))}>delete</button>
+            <button style={isUser} className='deleteButton' onClick={() => (delBlog(blog))}>delete</button>
           </td></tr>
           <tr><td><div className='urlrow' style={showWhenVisible}> {blog.url}</div></td></tr>
-          <tr><td><div className='likesrow' style={showWhenVisible}>likes {blog.likes} <button className='likebutton' onClick={() => {liking(blog.id)}}>Like</button></div></td></tr>
+          <tr><td><div className='likesrow' style={showWhenVisible}>likes {blog.likes} <button className='likebutton' onClick={() => {liking(blog)}}>Like</button></div></td></tr>
         </tbody>
       </table>
       </div>
