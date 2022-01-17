@@ -36,11 +36,20 @@ blogRouter.get('/:id', async (request,response) => {
 */
 
 blogRouter.put('/:id', userExtractor, async (request, response) => {
-	const id = request.params.id; 
-	const likes = request.body.likes; 
+	const id = request.params.id
+	const likes = request.body.likes 
 	const result = await Blog.findByIdAndUpdate(id, {likes:likes}, {runValidators:true, new:true})
 	response.status(200).json(result.toJSON());
 	
+})
+
+blogRouter.put('/:id/comments', userExtractor, async (request, response) => { 
+	const id = request.params.id
+	const comments = request.body.comments
+	const result = await Blog.findByIdAndUpdate(id, {comments:comments}, {runValidators:true, new:true})
+	response.status(200).json(result.toJSON())
+	
+
 })
 
 blogRouter.delete('/:id', userExtractor, async (request, response) => {

@@ -34,11 +34,21 @@ const remove = (id) => {
   const request = axios.delete(baseUrl+'/'+id, config)
   return request.then(response => response.data)
 }
+
+const addComm = (id, body) => {
+  const config = {
+    headers: { Authorization: token }
+  }
+  const request = axios.put(`${baseUrl}/${id}/comments`,body, config)
+  return request.then(response => response.data)
+
+}
 const blogService = {
   setToken,
   getAll,
   create,
   update,
+  addComm,
   remove
 }
 export default blogService

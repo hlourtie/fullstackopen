@@ -22,6 +22,10 @@ const blogSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',
 		default:"61c98912473cbb947a05ccfb"
+	},
+	comments:{
+		type:Array,
+		default:[]
 	}
   })
 

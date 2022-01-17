@@ -17,3 +17,10 @@
 	text-indent: 8px;
 	height: 25px;
 }
+table {
+	border-spacing: 3px;
+}
+td.blogrow {
+	border: 4px solid black;
+	background-color: lightgrey;
+}

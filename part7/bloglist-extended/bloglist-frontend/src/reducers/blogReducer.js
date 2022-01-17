@@ -41,6 +41,19 @@ export const deleteBlog = (id) => {
 		})
 	}
 }
+export const addComment = (blog, comment) => {
+	blog.comments.unshift(comment)
+	return async dispatch => {
+		await blogService.addComm(blog.id, blog)
+		dispatch({
+			type: 'ADDCOMMENT',
+			data:{
+				id: blog.id,
+				com: blog.comments
+			}
+		})
+	}
+}
 const blogReducer = (state=[], action) => {
 	switch(action.type){
 		case 'NEW':
@@ -51,6 +64,12 @@ const blogReducer = (state=[], action) => {
 			const inde = state.findIndex(element => element.id === action.data)
 			const newState = state
 			newState[inde] = { ...newState[inde], likes:newState[inde].likes + 1 }
+			return newState
+		}
+		case 'ADDCOMMENT':{
+			const index = state.findIndex(element => element.id === action.data.id)
+			const newState = state
+			state[index] = { ...newState[index], comments:action.data.com }
 			return newState
 		}
 		case 'DELETE':{

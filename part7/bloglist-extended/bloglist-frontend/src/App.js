@@ -9,7 +9,7 @@ import Menu from './components/Menu'
 import { initiateUser, logoutUser } from './reducers/userReducer'
 import { initBlog } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route, useHistory, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useHistory, useRouteMatch, Link } from 'react-router-dom'
 import { iniitiateUserList } from './reducers/userListReducer'
 
 const App = () => {
@@ -54,6 +54,8 @@ const handleLogOut = (event) => {
 const userId = useRouteMatch('/users/:id')
 const userSelected = userId ? users.find(userElem => userElem.id === userId.params.id) : null
 const blogPassed = userId? blogs.filter(blog => blog.user.id === userId.params.id ) : null
+const blogIDroute = useRouteMatch('/blog/:id')
+const blogSelected = blogIDroute? blogs.filter(blog => blog.id === blogIDroute.params.id)[0] : null
 const blogsDisplay = () => {
     const hideWhenVisible = { display: formVisible ? 'none' : '' }
     const showWhenVisible = { display: formVisible ? '' : 'none' }
@@ -69,8 +71,12 @@ const blogsDisplay = () => {
     <Route path='/users'>
       <Userlist blogs={blogs} />
     </Route>
+    <Route path='/blog/:id'>
+    <h2>Blog</h2>
+    <Blog blog={blogSelected} />
+    </Route>
     <Route path='/'>
-    <h2>blogs</h2>
+    <h2>Blog app</h2>
     <div style={hideWhenVisible}><button id='new-for-button' onClick={() => setFormVisible(true)}>Create new Blog</button></div>
     <div style={showWhenVisible}>
     <Blogform />
@@ -78,7 +84,7 @@ const blogsDisplay = () => {
     </div>
     <br />
     <br />
-    <div>{tempBlog.map(blog => <Blog key={blog.id} blog={blog} token={user.id} />)}</div> </Route>
+    <div><table><tbody>{tempBlog.map(blog => <tr key={blog.id}><td className='blogrow' ><Link to={`/blog/${blog.id}`} key={blog.id} >{blog.title}</Link></td></tr>)}</tbody></table></div> </Route>
     </Switch></>)
     }
 
