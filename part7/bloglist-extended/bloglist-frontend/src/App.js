@@ -11,6 +11,16 @@ import { initBlog } from './reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { Switch, Route, useHistory, useRouteMatch, Link } from 'react-router-dom'
 import { iniitiateUserList } from './reducers/userListReducer'
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  Button,
+} from '@material-ui/core'
 
 const App = () => {
   const [formVisible, setFormVisible] = useState(false)
@@ -62,7 +72,7 @@ const blogsDisplay = () => {
     const tempBlog = blogs.sort((a, b) => (a.likes > b.likes)? 1:-1)
 
   return( <>
-    <div><Menu /> {user.name} logged in <button onClick={handleLogOut}>Logout</button></div><br />
+    <div><Menu /> {user.name} logged in <Button variant='contained' onClick={handleLogOut}>Logout</Button></div><br />
     <Message />
     <Switch>
     <Route path='/users/:id'>
@@ -77,22 +87,24 @@ const blogsDisplay = () => {
     </Route>
     <Route path='/'>
     <h2>Blog app</h2>
-    <div style={hideWhenVisible}><button id='new-for-button' onClick={() => setFormVisible(true)}>Create new Blog</button></div>
+    <div style={hideWhenVisible}><Button variant='contained' id='new-for-button' onClick={() => setFormVisible(true)}>Create new Blog</Button></div>
     <div style={showWhenVisible}>
     <Blogform />
     <button onClick={() => setFormVisible(false)}>cancel</button>
     </div>
     <br />
     <br />
-    <div><table><tbody>{tempBlog.map(blog => <tr key={blog.id}><td className='blogrow' ><Link to={`/blog/${blog.id}`} key={blog.id} >{blog.title}</Link></td></tr>)}</tbody></table></div> </Route>
+    <div><TableContainer component={Paper}><Table><TableBody>{tempBlog.map(blog => <TableRow key={blog.id}><TableCell  ><Link to={`/blog/${blog.id}`} key={blog.id} >{blog.title}</Link></TableCell></TableRow>)}</TableBody></Table></TableContainer></div> </Route>
     </Switch></>)
     }
 
   return (
+    <Container>
     <div>
       {user === null && loginForm()}
       {user !== null && blogsDisplay()}
     </div>
+    </Container>
   )
 }
 
